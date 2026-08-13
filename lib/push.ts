@@ -4,15 +4,19 @@ import { prisma } from "@/lib/prisma";
 const vapidKeys = {
   publicKey: process.env.VAPID_PUBLIC_KEY || "",
   privateKey: process.env.VAPID_PRIVATE_KEY || "",
+  subject: process.env.VAPID_SUBJECT || "mailto:contato@aulas.com",
 };
 
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || "mailto:contato@aulas.com",
-  vapidKeys.publicKey,
-  vapidKeys.privateKey
-);
+function ensureVapidDetails() {
+  if (vapidKeys.publicKey && vapidKeys.privateKey) {
+    webpush.setVapidDetails(vapidKeys.subject, vapidKeys.publicKey, vapidKeys.privateKey);
+    return true;
+  }
+  return false;
+}
 
 export const VAPID_PUBLIC_KEY = vapidKeys.publicKey;
+const VAPID_CONFIGURED = ensureVapidDetails();
 
 export type PushPayload = {
   title: string;
@@ -26,6 +30,7 @@ export async function sendPushToSubscription(
   sub: { endpoint: string; p256dh: string; auth: string },
   payload: PushPayload
 ) {
+  if (!VAPID_CONFIGURED) return { ok: false as const, stale: false as const, code: 500 };
   try {
     await webpush.sendNotification(
       {
