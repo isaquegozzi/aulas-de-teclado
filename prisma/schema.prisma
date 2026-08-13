@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum StudentLevel {
+  INICIANTE
+  INTERMEDIARIO
+  AVANCADO
+}
+
+enum LessonStatus {
+  AGENDADA
+  CONCLUIDA
+  CANCELADA
+  REPOSICAO
+  FALTA
+}
+
+enum PaymentStatus {
+  PAGO
+  PENDENTE
+  ATRASADO
+}
+
+model Student {
+  id          String   @id @default(uuid())
+  name        String
+  phone       String?
+  email       String?
+  level       StudentLevel @default(INICIANTE)
+  lessonValue Float    @default(0)
+  color       String?  @default("#6366f1")
+  active      Boolean  @default(true)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  lessons         Lesson[]
+  makeUpCredits   MakeUpCredit[]
+  pushSubs        PushSubscription[]
+  payments        Payment[]
+
+  @@index([active])
+}
+
+model Lesson {
+  id          String      @id @default(uuid())
+  studentId   String
+  date        DateTime
+  durationMin Int         @default(60)
+  topic       String?
+  material    String?
+  status      LessonStatus @default(AGENDADA)
+  value       Float       @default(0)
+  paid        Boolean     @default(false)
+  isMakeUp    Boolean     @default(false)
+  makeUpForId String?
+  notes       String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  student  Student @relation(fields: [studentId], references: [id])
+  makeUpFor Lesson? @relation("MakeUpFor", fields: [makeUpForId], references: [id])
+  makeupLessons Lesson[] @relation("MakeUpFor")
+  payments Payment[]
+
+  @@index([date])
+  @@index([studentId])
+  @@index([status])
+}
+
+model MakeUpCredit {
+  id        String   @id @default(uuid())
+  studentId String
+  reason    String
+  lessonId  String?
+  used      Boolean  @default(false)
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@index([studentId, used])
+}
+
+model Payment {
+  id        String   @id @default(uuid())
+  studentId String
+  lessonId  String?
+  amount    Float
+  status    PaymentStatus @default(PENDENTE)
+  paidAt    DateTime?
+  method    String?
+  notes     String?
+  createdAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id])
+  lesson  Lesson? @relation(fields: [lessonId], references: [id])
+
+  @@index([studentId, status])
+  @@index([status])
+}
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  studentId String?
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  userAgent String?
+  createdAt DateTime @default(now())
+  lastUsed  DateTime @default(now())
+
+  student Student? @relation(fields: [studentId], references: [id])
+
+  @@index([studentId])
+}
