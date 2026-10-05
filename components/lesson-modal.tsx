@@ -95,9 +95,9 @@ export default function LessonModal({
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-xl bg-white shadow-2xl"
+        className="w-full max-w-lg rounded-t-xl bg-white shadow-2xl sm:rounded-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
@@ -121,7 +121,7 @@ export default function LessonModal({
               </select>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="stripe-label">Data e hora *</label>
                 <input type="datetime-local" value={datetime} onChange={(e) => setDatetime(e.target.value)} required className="stripe-input" />
@@ -142,7 +142,7 @@ export default function LessonModal({
               <input type="text" value={material} onChange={(e) => setMaterial(e.target.value)} placeholder="Método Hanon, apostila..." className="stripe-input" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="stripe-label">Valor (R$)</label>
                 <input type="number" min={0} step="0.01" value={value} onChange={(e) => setValue(e.target.value)} className="stripe-input" />
@@ -159,7 +159,7 @@ export default function LessonModal({
               </div>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:gap-6">
               <label className="flex items-center gap-2 text-sm text-gray-700">
                 <input type="checkbox" checked={isMakeUp} onChange={(e) => setIsMakeUp(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[#635bff] focus:ring-[#635bff]" />
                 Aula de reposição
@@ -183,7 +183,7 @@ export default function LessonModal({
           )}
         </form>
 
-        <div className="flex items-center justify-between border-t border-gray-200 px-6 py-4">
+        <div className="flex flex-col gap-2 border-t border-gray-200 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex gap-2">
             {onDelete && (
               <button type="button" onClick={onDelete} className="stripe-btn-secondary text-red-600 hover:bg-red-50">

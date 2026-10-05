@@ -98,8 +98,8 @@ export default function StudentDetail({ studentId, onClose, onChanged }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={onClose}>
+      <div className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-xl bg-white shadow-2xl sm:max-h-[90vh] sm:rounded-xl" onClick={(e) => e.stopPropagation()}>
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
           <div className="flex items-center gap-3">
             <div
@@ -123,7 +123,7 @@ export default function StudentDetail({ studentId, onClose, onChanged }: Props) 
         </div>
 
         <div className="space-y-6 p-6">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <div className="card p-4 text-center" style={{ borderColor: "#059669" }}>
               <p className="text-xs text-gray-500">Recebido</p>
               <p className="text-lg font-semibold" style={{ color: "#059669" }}>{formatBRL(totalEarned)}</p>
@@ -156,7 +156,7 @@ export default function StudentDetail({ studentId, onClose, onChanged }: Props) 
                 </div>
                 {pushError && <p className="text-sm text-red-600">{pushError}</p>}
                 {enabled && (
-                  <div className="flex items-center gap-2 rounded-lg bg-gray-50 p-3">
+                  <div className="flex flex-col gap-2 rounded-lg bg-gray-50 p-3 sm:flex-row sm:items-center">
                     <input type="text" value={testMsg} onChange={(e) => setTestMsg(e.target.value)} placeholder="Mensagem de teste..." className="stripe-input flex-1" />
                     <button onClick={sendTest} className="stripe-btn-secondary shrink-0">
                       Enviar teste
@@ -182,7 +182,7 @@ export default function StudentDetail({ studentId, onClose, onChanged }: Props) 
                 ))}
               </ul>
             )}
-            <form onSubmit={addCredit} className="mt-3 flex gap-2">
+            <form onSubmit={addCredit} className="mt-3 flex flex-col gap-2 sm:flex-row">
               <input type="text" value={creditReason} onChange={(e) => setCreditReason(e.target.value)} placeholder="Motivo da reposição..." className="stripe-input flex-1" />
               <button type="submit" className="stripe-btn-primary shrink-0">
                 + Reposição
@@ -190,7 +190,7 @@ export default function StudentDetail({ studentId, onClose, onChanged }: Props) 
             </form>
           </div>
 
-          <div className="card overflow-hidden">
+          <div className="card hidden overflow-hidden md:block">
             <div className="border-b border-gray-100 px-5 py-3">
               <h3 className="text-sm font-semibold text-gray-900">Histórico de aulas ({data.lessons.length})</h3>
             </div>
@@ -228,6 +228,35 @@ export default function StudentDetail({ studentId, onClose, onChanged }: Props) 
                   })}
                 </tbody>
               </table>
+            )}
+          </div>
+
+          <div className="space-y-2 md:hidden">
+            <div className="card p-4">
+              <h3 className="text-sm font-semibold text-gray-900">Histórico de aulas ({data.lessons.length})</h3>
+            </div>
+            {data.lessons.length === 0 ? (
+              <p className="card px-4 py-8 text-center text-sm text-gray-400">Sem aulas registradas</p>
+            ) : (
+              data.lessons.slice(0, 20).map((l) => {
+                const s = statusConfig[l.status] || statusConfig.AGENDADA;
+                return (
+                  <div key={l.id} className="card p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-sm text-gray-500">{formatDate(l.date)}</span>
+                      <span className="badge" style={{ backgroundColor: s.bg, color: s.color }}>{s.label}</span>
+                    </div>
+                    <p className="mt-1.5 text-sm font-medium text-gray-900">{l.topic || "—"}</p>
+                    <div className="mt-1.5 flex items-center justify-between text-xs text-gray-500">
+                      <span>{l.material || "Sem material"}</span>
+                      <span className="flex items-center gap-2">
+                        <span className="font-semibold text-gray-900">{formatBRL(l.value)}</span>
+                        <span style={{ color: l.paid ? "#059669" : "#d1d5db" }}>{l.paid ? "✓" : "—"}</span>
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
             )}
           </div>
         </div>

@@ -68,19 +68,18 @@ export default function MaterialsClient() {
           <h1 className="text-2xl font-semibold text-gray-900">Materiais</h1>
           <p className="mt-1 text-sm text-gray-500">O que foi ensinado e quais materiais foram usados</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex w-full flex-wrap gap-2 sm:w-auto">
           <select
             value={studentFilter}
             onChange={(e) => setStudentFilter(e.target.value)}
-            className="stripe-input"
-            style={{ width: "180px" }}
+            className="stripe-input w-full sm:w-[180px]"
           >
             <option value="all">Todos os alunos</option>
             {students.map(([id, s]) => (
               <option key={id} value={id}>{s.name}</option>
             ))}
           </select>
-          <div className="relative">
+          <div className="relative w-full sm:w-[200px]">
             <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -90,7 +89,6 @@ export default function MaterialsClient() {
               onChange={(e) => setMaterialFilter(e.target.value)}
               placeholder="Filtrar material..."
               className="stripe-input pl-9"
-              style={{ width: "200px" }}
             />
           </div>
         </div>
@@ -98,7 +96,7 @@ export default function MaterialsClient() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <div className="card overflow-hidden">
+          <div className="card hidden overflow-hidden md:block">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50/50">
@@ -135,6 +133,33 @@ export default function MaterialsClient() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="space-y-3 md:hidden">
+            {filtered.slice(0, 100).map((l) => (
+              <div key={l.id} className="card p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="flex min-w-0 items-center gap-2 text-sm font-medium">
+                    <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: l.student.color || "#635bff" }} />
+                    <span className="truncate">{l.student.name}</span>
+                  </span>
+                  <span className="shrink-0 text-xs text-gray-500">
+                    {formatDate(l.date)} · {formatTime(l.date)}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm text-gray-900">{l.topic || "—"}</p>
+                <div className="mt-2">
+                  {l.material ? (
+                    <span className="badge" style={{ backgroundColor: "#eef2ff", color: "#4f46e5" }}>{l.material}</span>
+                  ) : (
+                    <span className="text-xs text-gray-300">Sem material</span>
+                  )}
+                </div>
+              </div>
+            ))}
+            {filtered.length === 0 && (
+              <p className="card px-4 py-12 text-center text-sm text-gray-400">Nenhum registro encontrado</p>
+            )}
           </div>
         </div>
 

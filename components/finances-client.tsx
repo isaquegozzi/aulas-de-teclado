@@ -46,13 +46,13 @@ export default function FinancesClient() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="space-y-4">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Finanças</h1>
           <p className="mt-1 text-sm text-gray-500">Valores das aulas e controle de pagamento</p>
-        </div>
-        <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className="stripe-input" style={{ width: "180px" }} />
-      </div>
+       </div>
+        <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className="stripe-input w-full sm:w-[180px]" />
+     </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="card p-5">
@@ -71,7 +71,7 @@ export default function FinancesClient() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <div className="card overflow-hidden">
+          <div className="card hidden overflow-hidden md:block">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100 bg-gray-50/50">
@@ -110,6 +110,42 @@ export default function FinancesClient() {
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="space-y-3 md:hidden">
+            {monthLessons.map((l) => (
+              <div key={l.id} className="card p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: l.student.color || "#635bff" }} />
+                    <span className="truncate text-sm font-medium">{l.student.name}</span>
+                  </div>
+                  <span className="shrink-0 text-sm font-semibold text-gray-900">{formatBRL(l.value)}</span>
+                </div>
+                <div className="mt-1 flex items-center justify-between text-xs text-gray-500">
+                  <span>{formatDate(l.date)}</span>
+                  <span
+                    className="badge"
+                    style={{ backgroundColor: l.status === "CONCLUIDA" ? "#ecfdf5" : "#eef2ff", color: l.status === "CONCLUIDA" ? "#059669" : "#4f46e5" }}
+                  >
+                    {l.status === "CONCLUIDA" ? "Concluída" : "Agendada"}
+                  </span>
+                </div>
+                <button
+                  onClick={() => togglePaid(l)}
+                  className={`mt-3 w-full rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                    l.paid
+                      ? "border-green-200 bg-[#ecfdf5] text-[#059669]"
+                      : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+                  }`}
+                >
+                  {l.paid ? "✓ Pago" : "Marcar pago"}
+                </button>
+              </div>
+            ))}
+            {monthLessons.length === 0 && (
+              <p className="card px-4 py-12 text-center text-sm text-gray-400">Nenhuma aula neste mês</p>
+            )}
           </div>
         </div>
 

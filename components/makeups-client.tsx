@@ -58,8 +58,8 @@ export default function MakeupsClient() {
         <p className="rounded-lg px-4 py-2 text-sm" style={{ backgroundColor: "#ecfdf5", color: "#059669" }}>{message}</p>
       )}
 
-      <form onSubmit={addCredit} className="card flex flex-wrap gap-3 p-4">
-        <select value={form.studentId} onChange={(e) => setForm({ ...form, studentId: e.target.value })} required className="stripe-input" style={{ width: "200px" }}>
+      <form onSubmit={addCredit} className="card flex flex-col gap-3 p-4 sm:flex-row sm:flex-wrap">
+        <select value={form.studentId} onChange={(e) => setForm({ ...form, studentId: e.target.value })} required className="stripe-input w-full sm:w-[200px]">
           <option value="">Selecione o aluno...</option>
           {students.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
         </select>

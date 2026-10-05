@@ -58,41 +58,40 @@ export default function StudentsClient() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+      <div className="space-y-4">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Alunos</h1>
           <p className="mt-1 text-sm text-gray-500">{students.length} cadastrados</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <div className="relative">
+       </div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="relative w-full sm:flex-1">
             <svg className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+           </svg>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar aluno..."
               className="stripe-input pl-9"
-              style={{ width: "240px" }}
             />
-          </div>
+         </div>
           <button
             onClick={() => {
               setEditing(null);
               setModalOpen(true);
             }}
-            className="stripe-btn-primary"
+            className="stripe-btn-primary sm:shrink-0"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
+           </svg>
             Novo aluno
-          </button>
-        </div>
-      </div>
+         </button>
+       </div>
+     </div>
 
-      <div className="card overflow-hidden">
+      <div className="card hidden overflow-hidden md:block">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50/50">
@@ -190,6 +189,79 @@ export default function StudentsClient() {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {filtered.map((s) => {
+          const lc = levelConfig[s.level] || levelConfig.INICIANTE;
+          return (
+            <div key={s.id} className="card p-4">
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  className="flex min-w-0 items-center gap-3 text-left"
+                  onClick={() => {
+                    setDetailId(s.id);
+                    setDetailOpen(true);
+                  }}
+                >
+                  <div
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white"
+                    style={{ backgroundColor: s.color || "#635bff" }}
+                  >
+                    {s.name.slice(0, 2).toUpperCase()}
+                  </div>
+                  <span className="min-w-0">
+                    <span className="block truncate font-medium text-[#635bff]">{s.name}</span>
+                    <span className="block text-xs text-gray-500">{s.phone || "sem telefone"}</span>
+                  </span>
+                </button>
+                <div className="flex shrink-0 gap-1">
+                  <button
+                    onClick={() => {
+                      setEditing(s);
+                      setModalOpen(true);
+                    }}
+                    className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-[#635bff]"
+                    title="Editar"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(s.id)}
+                    className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                    title="Excluir"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
+                <span className="badge" style={{ backgroundColor: lc.bg, color: lc.color }}>
+                  {levelLabel[s.level] || s.level}
+                </span>
+                <span
+                  className="badge"
+                  style={{
+                    backgroundColor: s.active ? "#ecfdf5" : "#f3f4f6",
+                    color: s.active ? "#059669" : "#6b7280",
+                  }}
+                >
+                  {s.active ? "Ativo" : "Inativo"}
+                </span>
+                <span className="ml-auto text-gray-500">
+                  {s._count?.lessons || 0} aulas
+                </span>
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length === 0 && (
+          <p className="card px-4 py-12 text-center text-sm text-gray-400">Nenhum aluno encontrado</p>
+        )}
       </div>
 
       {modalOpen && (

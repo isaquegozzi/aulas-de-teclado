@@ -84,8 +84,8 @@ export default function StudentModal({ student, onClose, onSaved }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
-      <div className="w-full max-w-md rounded-xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-t-xl bg-white shadow-2xl sm:rounded-xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
           <h2 className="text-base font-semibold text-gray-900">{student ? "Editar aluno" : "Novo aluno"}</h2>
           <button onClick={onClose} className="rounded-md p-1 text-gray-400 hover:bg-gray-100">
@@ -102,7 +102,7 @@ export default function StudentModal({ student, onClose, onSaved }: Props) {
               <input type="text" value={form.name} onChange={(e) => set("name", e.target.value)} required placeholder="Nome completo" className="stripe-input" />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="stripe-label">Telefone</label>
                 <input type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="(00) 00000-0000" className="stripe-input" />
@@ -113,7 +113,7 @@ export default function StudentModal({ student, onClose, onSaved }: Props) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="stripe-label">Nível</label>
                 <select value={form.level} onChange={(e) => set("level", e.target.value)} className="stripe-input">
@@ -130,7 +130,7 @@ export default function StudentModal({ student, onClose, onSaved }: Props) {
 
             <div>
               <label className="stripe-label">Cor</label>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {COLORS.map((c) => (
                   <button
                     key={c}

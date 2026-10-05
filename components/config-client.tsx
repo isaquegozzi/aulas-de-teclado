@@ -47,7 +47,7 @@ export default function ConfigClient() {
         </p>
       </div>
 
-      <div className="card overflow-hidden">
+      <div className="card hidden overflow-hidden md:block">
         <div className="border-b border-gray-100 px-6 py-4">
           <h2 className="text-sm font-semibold text-gray-900">Dispositivos inscritos ({subs.length})</h2>
         </div>
@@ -83,6 +83,33 @@ export default function ConfigClient() {
               ))}
             </tbody>
           </table>
+        )}
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        <div className="card p-4">
+          <h2 className="text-sm font-semibold text-gray-900">Dispositivos inscritos ({subs.length})</h2>
+        </div>
+        {subs.length === 0 ? (
+          <p className="card px-4 py-8 text-center text-sm text-gray-400">Nenhum dispositivo inscrito ainda</p>
+        ) : (
+          subs.map((s) => (
+            <div key={s.id} className="card p-4">
+              <div className="flex items-center justify-between gap-3">
+                {s.student ? (
+                  <span className="flex min-w-0 items-center gap-2 text-sm font-medium">
+                    <span className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: s.student.color || "#635bff" }} />
+                    <span className="truncate">{s.student.name}</span>
+                  </span>
+                ) : (
+                  <span className="text-sm text-gray-400">Professor (geral)</span>
+                )}
+                <span className="shrink-0 text-xs text-gray-500">{new Date(s.createdAt).toLocaleDateString("pt-BR")}</span>
+              </div>
+              <p className="mt-1 truncate text-xs text-gray-400">{s.userAgent || "—"}</p>
+              <p className="mt-0.5 truncate text-[11px] text-gray-300">{s.endpoint}</p>
+            </div>
+          ))
         )}
       </div>
 
