@@ -6,7 +6,7 @@ Sistema pessoal para organizar aulas de teclado: agenda, alunos, materiais ensin
 
 ## Estado atual
 
-Aplicação completa e com deploy configurado. As oito telas funcionam e o lembrete automático por notificação push está implementado.
+Aplicação com oito telas implementadas e configuração de deploy. O lembrete automático por notificação push também está implementado. Ainda há problemas de autenticação e outras pendências descritas abaixo.
 
 O que já funciona:
 
@@ -205,8 +205,6 @@ O lembrete do dia anterior sai sozinho às 09:00 UTC, para as aulas cadastradas.
 
 ## Limitações e pendências
 
-Esta seção divide os defeitos conhecidos das funcionalidades ainda não implementadas.
-
 ### Defeitos conhecidos
 
 **Autenticação**
@@ -236,12 +234,11 @@ Esta seção divide os defeitos conhecidos das funcionalidades ainda não implem
 **Interface e build**
 
 - **Agendar uma reposição usa `window.prompt()`**, com o formato fixo `AAAA-MM-DDTHH:MM`.
-- **Todas as telas buscaram dados por `fetch` no cliente.** O primeiro carregamento sempre mostra "Carregando..." e nada é cacheado no servidor.
+- **Todas as telas buscam dados por `fetch` no navegador.** O primeiro carregamento sempre mostra "Carregando..." e nada é cacheado no servidor.
 - **Não há `error.tsx`, `loading.tsx` nem página de "não encontrado"** próprias.
 - **Não há validação de entrada com biblioteca.** Os handlers usam `req.json()` e os campos direto, com checagem manual mínima.
 - **`app/fonts/` tem dois arquivos Geist que nenhuma parte do projeto usa.** Resíduo do `create-next-app`.
 - **A fonte Inter vem do Google por `next/font/google`**, então o build precisa de acesso à rede.
-- **O `.gitignore` termina com `.env*`**, que também casa com `.env.example`. O arquivo já está versionado, então não foi afetado, mas a regra deveria ter um `!.env.example` depois.
 
 ### Funcionalidades ainda não implementadas
 
